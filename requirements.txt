@@ -1,0 +1,30 @@
+# Core
+torch>=2.1.0
+torchvision>=0.16.0
+lightning>=2.1.0
+
+# Data & ML
+numpy
+pandas
+scikit-learn
+Pillow
+
+# Visualisation
+matplotlib
+plotly
+umap-learn
+
+# Experiment tracking
+tqdm
+
+# Config
+pyyaml
+
+# Utilities
+joblib
+
+# API / Frontend (optional — install only if serving)
+# fastapi
+# uvicorn
+streamlit
+plotly

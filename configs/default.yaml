@@ -1,0 +1,46 @@
+seed: 42
+
+data:
+  artists_csv: ../imprint/data/raw/artists.csv
+  images_dir: ../imprint/data/raw/images/images
+  splits_dir: ../imprint/data/splits
+  min_paintings: 50
+  image_size: 224
+  val_size: 0.15
+  test_size: 0.15
+
+model:
+  backbone: resnet18
+  pretrained: true
+  freeze_backbone_until: layer2  # Freeze conv1, bn1, layer1, layer2
+  gram_reduce_dim: 64            # 1x1 conv channel reduction before Gram
+  gram_proj_dim: 256             # Projection dim for each Gram scale
+  num_scales: 3                  # layer2, layer3, layer4
+  attention_heads: 4
+  embedding_dim: 128
+  dropout: 0.3
+  use_global_branch: true        # Fuse GAP features with Gram features
+
+training:
+  epochs: 50
+  batch_size_per_class: 8        # K images per class in balanced batch
+  classes_per_batch: 5           # P classes per batch (total = P*K = 40)
+  lr: 0.0003
+  weight_decay: 0.00001
+  scheduler: cosine
+  warmup_epochs: 5
+  # Loss weights
+  triplet_margin: 0.3
+  triplet_weight: 1.0
+  proto_weight: 0.5
+  proto_temperature: 0.1
+  # Few-shot split within each batch
+  proto_k_shot: 5               # Support images per class (from K total)
+  # Mining
+  mining_strategy: semi_hard     # 'random', 'hard', 'semi_hard'
+
+evaluation:
+  recall_k: [1, 3, 5, 10]
+  few_shot_k: [1, 3, 5]
+  num_eval_episodes: 500
+  eval_n_way: 5
