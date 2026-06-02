@@ -1,4 +1,4 @@
-# Imprint v2 — Multi-Scale Gram Attention + Few-Shot Prototypical Style Attribution
+# Imprint — Multi-Scale Gram Attention + Few-Shot Prototypical Style Attribution
 
 A research-grade style attribution system that measures **stylistic similarity** between artworks using two novel contributions:
 
