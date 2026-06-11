@@ -1,7 +1,7 @@
 """
 Inference engine for computing style similarity between two images.
 
-Wraps the Imprint v2 StyleEncoder to provide:
+Wraps the Imprint StyleEncoder to provide:
 1. Cosine similarity score [-1, 1].
 2. Attention weights for both images, showing whether the model
    relied more on texture (layer2), motifs (layer3), or layout (layer4).
@@ -11,6 +11,9 @@ from typing import Dict, Tuple
 
 import torch
 import torch.nn.functional as F
+import numpy as np
+import cv2
+from PIL import Image
 
 from src.models.encoder import StyleEncoder
 
@@ -74,3 +77,35 @@ class StyleSimilarityEngine:
         }
 
         return cos_sim, attention_breakdown
+
+    @torch.no_grad()
+    def get_heatmap_overlay(self, image_tensor: torch.Tensor, original_img: Image.Image) -> Image.Image:
+        """
+        Generates a Grad-CAM-like spatial activation heatmap overlay.
+        """
+        if image_tensor.dim() == 3:
+            image_tensor = image_tensor.unsqueeze(0)
+            
+        feature_maps = self.encoder.backbone(image_tensor.to(self.device))
+        
+        # We use layer4 as it captures the most semantic information (composition/layout)
+        layer_features = feature_maps["layer4"]
+        
+        # Compute spatial activation energy
+        activation = layer_features.abs().sum(dim=1).squeeze().cpu().numpy()
+        
+        # Normalize
+        activation = np.maximum(activation, 0)
+        activation = (activation - np.min(activation)) / (np.max(activation) - np.min(activation) + 1e-8)
+        activation = np.uint8(255 * activation)
+        
+        # Resize and apply colormap
+        heatmap = cv2.resize(activation, (original_img.width, original_img.height))
+        heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+        heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
+        
+        # Blend
+        orig_array = np.array(original_img)
+        superimposed = cv2.addWeighted(orig_array, 0.6, heatmap, 0.4, 0)
+        
+        return Image.fromarray(superimposed)
