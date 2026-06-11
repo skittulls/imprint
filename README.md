@@ -6,7 +6,7 @@ By extracting texture correlations and using self-attention to weight different 
 
 ---
 
-## 🚀 Key Performance Metrics
+## Key Performance Metrics
 
 The system was evaluated across three core metric groups, demonstrating outstanding performance in open-set, few-shot environments:
 
@@ -30,7 +30,7 @@ Measures the system's ability to classify unseen query paintings into a set of 5
 
 ---
 
-## 🎨 Core Architecture (MSGMAtt)
+## Core Architecture (MSGMAtt)
 
 Imprint utilizes a dual-pathway feature extractor mapping images into a 128-D L2-normalized Euclidean hypersphere:
 
@@ -70,7 +70,7 @@ flowchart TD
 
 ---
 
-## 🔍 Robust Gradio Web Interface
+## Robust Gradio Web Interface
 
 The updated codebase includes a premium, dark-mode adapted Gradio frontend (`frontend/app_gradio.py`) featuring:
 
@@ -83,7 +83,7 @@ The updated codebase includes a premium, dark-mode adapted Gradio frontend (`fro
 
 ---
 
-## 🛠️ Project Structure
+## Project Structure
 
 ```
 imprint/
@@ -125,7 +125,7 @@ imprint/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Setup Environment
 Clone the repository, go into the directory, and run the setup commands to build the virtual environment and install all dependencies:
@@ -170,7 +170,7 @@ This launches a browser-accessible web application at `http://127.0.0.1:7860/` w
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 - **Vidhi Sharma** (b24es1034)
 - **Alankrita Singh** (b24mt1004)
